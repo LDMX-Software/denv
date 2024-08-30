@@ -247,6 +247,7 @@ else
       "Do you have permission to write there?"
     exit 1
   fi
+  ln -sf "${dest_path}/denv" "${dest_path}/ldmx"
   install -m 0775 _denv_entrypoint "${dest_path}"
   if [ -e "man" ]; then
     for file in "${PWD}"/man/man1/*; do
