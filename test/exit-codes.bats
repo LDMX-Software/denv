@@ -5,7 +5,7 @@ setup() {
   common_setup
   
   go_to_tmp_work
-  denv init ubuntu:22.04
+  denv init alpine:latest
 }
 
 teardown() {
@@ -20,13 +20,20 @@ teardown() {
   mkdir -p .local/bin
   echo "echo world" > .local/bin/hello
   chmod +x .local/bin/hello
+  echo "export PATH=\"\${PATH}:\${HOME}/.local/bin\"" > .profile
   run denv hello
   assert_success
   assert_container_output "world"
 }
 
-@test "by-pass broken .bashrc if non-interactive" {
-  echo "exit 6" >> .bashrc
-  run -6 denv
-  run -0 denv true
-}
+# not running this test because alpine has ash by
+# default and ash does not (as far as I can tell)
+# have a RC file that is only read in interactive
+#
+# keeping the code around in case I am informed
+# of another way to test this
+#@test "by-pass broken .bashrc if non-interactive" {
+#  echo "exit 6" >> .bashrc
+#  run -6 denv
+#  run -0 denv true
+#}
